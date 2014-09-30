@@ -1,0 +1,1 @@
+Visualize the STN config
