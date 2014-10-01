@@ -105,39 +105,49 @@
 
         function myManualParser(config, parent)
         {
-        	var lines = config.split('\n');
-			for(var i = 0;i < lines.length;i++){
-				//Remove attribute value
-				var parts = lines[i].trim().split(' ');
-				//parts[0] = path
-				//parts[1] = attribute name
-				//parts[2] = attribute value
-				var paths = parts[0].split(',');
-				//paths[paths.lenght-1] = node
-				//paths[paths.lenght-2] = parent
-				console.log("paths.lenght: " + paths.length);
-				if(paths.length > 1)
-				{
-					if(parts.length == 1)
-					{
-					var name = {v:paths[paths.length-1].toUpperCase(), f:'<div style="font-weight:bold;">' + paths[paths.length-1].toUpperCase() + "</div>"};
-					drawData[drawData.length] = [name, paths[paths.length-2].toUpperCase(), ""];
-					}
-					else
-					{
-							drawData.forEach(function(entry) {
-        					if(entry[0].v === paths[paths.length-1].toUpperCase())
-        					{
-        						entry[0].f = entry[0].f + parts[1] + ': <div style="font-style:italic;display:inline">' + parts[2] + "</div><br>";
-        					}
-        					});
-					}
+            var parent = "";
+            var lines = config.split('\n');
+            for(var i = 0;i < lines.length;i++){
+                //Remove attribute value
+                var parts = lines[i].trim().split(' ');
+                //parts[0] = path
+                //parts[1] = attribute name
+                //parts[2] = attribute value
+                var paths = parts[0].split(',');
+                //paths[paths.lenght-1] = node
+                //paths[paths.lenght-2] = parent
+                console.log("paths.lenght: " + paths.length);
+               // if(paths.length > 1)
+               // {
+                    if(parts.length == 1)
+                    {
+                    if(paths.length == 1)
+                    {
+                        parent = "";
+                    }
+                    else
+                    {
+                    parent = paths[paths.length-2].toUpperCase();
+                    }
+
+                    var name = {v:paths[paths.length-1].toUpperCase(), f:'<div style="font-weight:bold;">' + paths[paths.length-1].toUpperCase() + "</div>"};
+                    drawData[drawData.length] = [name, parent, ""];
+                    }
+                    else
+                    {
+                            drawData.forEach(function(entry) {
+                            if(entry[0].v === paths[paths.length-1].toUpperCase())
+                            {
+                                entry[0].f = entry[0].f + parts[1] + ': <div style="font-style:italic;display:inline">' + parts[2] + "</div><br>";
+                            }
+                            });
+                    }
 
 
 
-				}
+                //}
 
-			}
+            }
         }
 
 
