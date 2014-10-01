@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>readConfig</title>
+<textarea id="myTextArea" rows="4" cols="50" oninput="onNewConfig()">
+
+</textarea>
+<div id="chart_div" style="width:400; height:300"></div>
+<p id="demo"></p>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+
+</head>
+<body>
+
+
+
+<script>
+"use strict";
+/* Example of data
+	var tempData = [
+          [{v:'Mike', f:'Mike<div style="color:red; font-style:italic">President</div>'}, '', 'The President'],
+          [{v:'Jim', f:'Jim<div style="color:red; font-style:italic">Vice President<div>'}, 'Mike', 'VP'],
+          ['Alice', 'Mike', ''],
+          ['Bob', 'Jim', 'Bob Sponge'],
+          ['Carol', 'Bob', ''],
+          ['Carol', 'Jim', '']
+        ];
+        */
+
+
+        var dataId = 0;
+        var drawData = [];
+        google.load("visualization", "1", {packages:["orgchart"]});
+
+
+        function onNewConfig()
+        {       	
+        	drawData = [];
+        	var inData = $("#myTextArea").val().trim();
+			var xmlDoc;	
+
+        	try
+        	{
+        	// Is it XML?
+        	xmlDoc = $.parseXML(inData);
+        	}
+        	catch (e) {
+			//document.getElementById("demo").innerHTML = "No XML";
+			}
+
+        	if(jQuery.isXMLDoc(xmlDoc))
+        	{
+				myXMLParser($(inData), "");
+        	}
+        	else
+        	{
+				myManualParser(inData, "");
+        	}
+
+
+        	console.log(drawData);
+        	drawChart();       	
+        }
+
+        function drawChart() {
+        	var data = new google.visualization.DataTable();
+        	data.addColumn('string', 'Name');
+        	data.addColumn('string', 'Manager');
+        	data.addColumn('string', 'ToolTip');
+        	data.addRows(drawData);
+        	var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        	chart.draw(data, {allowHtml:true, size:'small'});
+        }
+
+        function myXMLParser(xml, parent)
+        {
+        	$(xml).children().each(function(){
+        		if($(this).context.textContent) 	
+        		{
+        			if($(this).context.childElementCount === 0)
+        			{
+        				var name = $(this).context.tagName;
+        				var value = $(this).context.textContent;
+        				drawData.forEach(function(entry) {
+        				//	 console.log("* " + entry[0] + " " + parent) ;
+        				//   console.log(entry[0]);
+        					if(entry[0] === parent)
+        					{
+        						entry[0].f = entry[0].f + name + ': <div style="font-style:italic;display:inline">' + value + "</div><br>";
+        					}
+        				});
+        			}
+        			else
+        			{
+        				var name = {v:(dataId++).toString(), f:'<div style="font-weight:bold;">' + $(this).context.tagName + " " + $(this).attr('instanceid') + "</div>"};
+        				drawData[drawData.length] = [name, parent, ""];
+        				myXMLParser($(this), name);
+        			}
+        		}
+        	});
+        }
+
+        function myManualParser(config, parent)
+        {
+        	var lines = config.split('\n');
+			for(var i = 0;i < lines.length;i++){
+				//Remove attribute value
+				var parts = lines[i].trim().split(' ');
+				//parts[0] = path
+				//parts[1] = attribute name
+				//parts[2] = attribute value
+				var paths = parts[0].split(',');
+				//paths[paths.lenght-1] = node
+				//paths[paths.lenght-2] = parent
+				console.log("paths.lenght: " + paths.length);
+				if(paths.length > 1)
+				{
+					if(parts.length == 1)
+					{
+					var name = {v:paths[paths.length-1].toUpperCase(), f:'<div style="font-weight:bold;">' + paths[paths.length-1].toUpperCase() + "</div>"};
+					drawData[drawData.length] = [name, paths[paths.length-2].toUpperCase(), ""];
+					}
+					else
+					{
+							drawData.forEach(function(entry) {
+        					if(entry[0].v === paths[paths.length-1].toUpperCase())
+        					{
+        						entry[0].f = entry[0].f + parts[1] + ': <div style="font-style:italic;display:inline">' + parts[2] + "</div><br>";
+        					}
+        					});
+					}
+
+
+
+				}
+
+			}
+        }
+
+
+        </script>
+        <style type="text/css">
+        .google-visualization-orgchart-node-small {
+        	vertical-align: top;
+        	text-align: left;
+        	width: 100px:
+        }
+        </style>
+        </body>
+        </html>
