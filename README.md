@@ -6,17 +6,13 @@ Generate graphs based on two different sets of input.
 1. Output
 
 ```
-level1=1
-level1=1 leaf1 1
-level1=1,level2=1
-level1=1,level2=1 leaf2 2
-level1=1,level2=1 leaf3 3
-level1=1,level2=2
-level1=1,level2=2 leaf4 4
-level1=1,level2=2,level3=1
-level1=1,level2=2,level3=1 leaf5 5
-level1=1,level2=2,level3=2
-level1=1,level2=2,level3=2 leaf6 6
+level1=0; attribute 1
+level1=0,level2=0; attribute 1
+level1=0,level2=1; attribute 1
+level1=0,level2=2; attribute 1
+level1=0,level2=2,level3=1; attribute 1
+level1=0,level2=2,level3=1,level4=1; attribute 1
+level1=0,level2=2,level3=1,level4=2; attribute 1
 ```
 
 2. XML

@@ -53,7 +53,7 @@
             myManualParser(inData);
         }
 
-
+ console.log("drawData");
         console.log(drawData);
         drawChart();
     }
@@ -130,32 +130,83 @@
 
     function myManualParser(config) {
         var parent = "";
+			console.log("config");
+			console.log(config);
+		try
+		{
         var lines = config.split('\n');
+		}
+		catch (e) {
+		console.log("Error");
+		console.log(config);
+		console.log(e);
+        }
         for (var i = 0; i < lines.length; i++) {
+			var found = false;
             //Remove attribute value
+						console.log("lines");
+			//console.log(lines);
             var parts = lines[i].trim().split(' ');
             //parts[0] = path
             //parts[1] = attribute name
             //parts[2] = attribute value
-            var paths = parts[0].split(',');
+			//console.log("parts[0]");
+			//console.log(parts[0]);
+            var paths = parts[0].split(/[\s,;]+/);;
+			paths = $.grep(paths,function(n){ return(n) });; 
             //paths[paths.lenght-1] = node
             //paths[paths.lenght-2] = parent
-            console.log("paths.lenght: " + paths.length);
+            //console.log("paths.lenght: " + paths.length);
+			//console.log("paths length " + paths.length);
+			//console.log(paths);
+			//console.log("parts.length " + parts.length);
+			//console.log(parts);
             if (parts.length == 1) {
+			//console.log("1");
                 if (paths.length == 1) {
                     parent = "";
                 }
                 else {
+					
                     parent = paths[paths.length - 2].toUpperCase();
+					//console.log("parent");
+					//console.log(parent);
+					
                 }
+				//console.log("ACTION: 1 " + paths[paths.length - 1].toUpperCase() + " " + parent);
                 drawData[drawData.length] = [getNodeString(paths[paths.length - 1].toUpperCase(), paths[paths.length - 1].toUpperCase()), parent];
+					if(paths.length > 2)
+					{
+					//console.log("paths.splice(0,´paths.length-2).join()");
+					var temptemp = paths.splice(0,paths.length-1).join();
+					//console.log(temptemp);
+					myManualParser(temptemp);
+					}
             }
             else {
+			//console.log("2");
                 drawData.forEach(function (entry) {
+				//console.log("3");
                     if (entry[0].v === paths[paths.length - 1].toUpperCase()) {
+					//console.log("4");
+					found = true;
+					//console.log("ACTION: 2");
                         entry[0].f = entry[0].f + getLeafString(parts[1], parts[2]);
                     }
                 });
+				//console.log("Found: " + found);
+				if(found === false)
+				{
+				//console.log("Add1 " + parts[0]);
+				//console.log(parts);
+				var temptemptemp = parts.splice(1,parts.length-2).join();
+				//console.log("Add2 " + lines[i]);
+				//console.log(parts.join());
+				//console.log(temptemptemp);
+		
+				myManualParser(parts[0]);
+				myManualParser(lines[i]);
+				}
             }
         }
     }
@@ -169,6 +220,8 @@
         return attributeName + ': <div style="font-style:italic;display:inline">' + attributeValue + "</div><br>"
     }
 
+
+	
 
 </script>
 <style type="text/css">
