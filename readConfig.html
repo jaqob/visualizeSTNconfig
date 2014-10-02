@@ -106,7 +106,7 @@
                 var value = $(xml)[0].textContent;
                 drawData.forEach(function (entry) {
                     if (entry[0] === parent) {
-                        entry[0].f = entry[0].f + getLeafString(name, value);
+                        entry[0].f = entry[0].f + getLeafString(name + "=", value);
                     }
                 });
             }
@@ -188,7 +188,6 @@
                     if (entry[0].v === paths[paths.length - 1].toUpperCase()) {
 					//console.log("4");
 					found = true;
-					//console.log("ACTION: 2");
                         entry[0].f = entry[0].f + getLeafString(parts[1], parts[2]);
                     }
                 });
@@ -208,7 +207,8 @@
     }
 
     function getLeafString(attributeName, attributeValue) {
-        return attributeName + ': <div style="font-style:italic;display:inline">' + attributeValue + "</div><br>"
+	console.log(attributeName + " " + attributeValue);
+        return  '<div style="font-style:italic;display:inline">' + attributeName + '' + attributeValue + "</div><br>"
     }
 
 
@@ -219,8 +219,13 @@
     .google-visualization-orgchart-node-small {
         vertical-align: top;
         text-align: left;
-        width: 100px;
+        width: 400px;
     }
+	
+	    .google-visualization-orgchart-node {
+        width: 300px;
+    }
+	
 </style>
 </body>
 </html>
