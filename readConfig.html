@@ -142,6 +142,8 @@
 		console.log(e);
         }
         for (var i = 0; i < lines.length; i++) {
+		if (lines[i] === "")
+		{continue;}
 			var found = false;
 			console.log("lines");
             var parts = lines[i].trim().split(' ');
