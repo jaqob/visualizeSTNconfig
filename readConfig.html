@@ -143,15 +143,11 @@
         }
         for (var i = 0; i < lines.length; i++) {
 			var found = false;
-            //Remove attribute value
-						console.log("lines");
-			//console.log(lines);
+			console.log("lines");
             var parts = lines[i].trim().split(' ');
             //parts[0] = path
             //parts[1] = attribute name
             //parts[2] = attribute value
-			//console.log("parts[0]");
-			//console.log(parts[0]);
             var paths = parts[0].split(/[\s,;]+/);;
 			paths = $.grep(paths,function(n){ return(n) });; 
             //paths[paths.lenght-1] = node
@@ -177,7 +173,7 @@
                 drawData[drawData.length] = [getNodeString(paths[paths.length - 1].toUpperCase(), paths[paths.length - 1].toUpperCase()), parent];
 					if(paths.length > 2)
 					{
-					//console.log("paths.splice(0,´paths.length-2).join()");
+					//console.log("paths.splice(0,´paths.length-1).join()");
 					var temptemp = paths.splice(0,paths.length-1).join();
 					//console.log(temptemp);
 					myManualParser(temptemp);
@@ -196,14 +192,7 @@
                 });
 				//console.log("Found: " + found);
 				if(found === false)
-				{
-				//console.log("Add1 " + parts[0]);
-				//console.log(parts);
-				var temptemptemp = parts.splice(1,parts.length-2).join();
-				//console.log("Add2 " + lines[i]);
-				//console.log(parts.join());
-				//console.log(temptemptemp);
-		
+				{		
 				myManualParser(parts[0]);
 				myManualParser(lines[i]);
 				}
