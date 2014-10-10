@@ -1,14 +1,17 @@
-   "use strict";
-    /* Example of data
-     var tempData = [
-     [{v:'Mike', f:'Mike<div style="color:red; font-style:italic">President</div>'}, ''],
-     [{v:'Jim', f:'Jim<div style="color:red; font-style:italic">Vice President<div>'}, 'Mike'],
-     ['Alice', 'Mike'],
-     ['Bob', 'Jim'],
-     ['Carol', 'Bob'],
-     ['Carol', 'Jim']
-     ];
-     */
+"use strict";
+/* Example of data
+var tempData = [
+[{v:'Mike', f:'Mike<div style="color:red; font-style:italic">President</div>'}, ''],
+[{v:'Jim', f:'Jim<div style="color:red; font-style:italic">Vice President<div>'}, 'Mike'],
+['Alice', 'Mike'],
+['Bob', 'Jim'],
+['Carol', 'Bob'],
+['Carol', 'Jim']
+];
+*/
+/*global google*/
+/*global jQuery*/
+/*global $*/
 
 
     var dataId = 0;
@@ -35,8 +38,8 @@
             myManualParser(inData);
         }
 
- console.log("drawData");
-        console.log(drawData);
+ //console.log("drawData");
+        //console.log(drawData);
         drawChart();
     }
 
@@ -101,7 +104,7 @@
                         attribute = "";
                     }
                     var name2 = getNodeString((dataId++).toString(), tagname + " " + attribute);
-                    drawData[drawData.length] = [name2, parent]
+                    drawData[drawData.length] = [name2, parent];
                 }
                 $(xml).children().each(function () {
                     myXMLParserv2($(this), name2);
@@ -111,29 +114,31 @@
     }
 
     function myManualParser(config) {
-        var parent = "";
-			console.log("config");
-			console.log(config);
+    var parent = "";
+     var lines = "";
+		//console.log("config");
+		//console.log(config);
 		try
 		{
-        var lines = config.split('\n');
+        lines = config.split('\n');
 		}
 		catch (e) {
-		console.log("Error");
-		console.log(config);
-		console.log(e);
-        }
+		//console.log("Error");
+		//console.log(config);
+		//console.log(e);
+    }
+      
         for (var i = 0; i < lines.length; i++) {
 		if (lines[i] === "")
 		{continue;}
 			var found = false;
-			console.log("lines");
+			//console.log("lines");
             var parts = lines[i].trim().split(' ');
             //parts[0] = path
             //parts[1] = attribute name
             //parts[2] = attribute value
-            var paths = parts[0].split(/[\s,;]+/);;
-			paths = $.grep(paths,function(n){ return(n) });; 
+            var paths = parts[0].split(/[\s,;]+/);
+			paths = $.grep(paths,function(n){ return(n); }); 
             //paths[paths.lenght-1] = node
             //paths[paths.lenght-2] = parent
             //console.log("paths.lenght: " + paths.length);
@@ -189,6 +194,6 @@
     }
 
     function getLeafString(attributeName, attributeValue) {
-	console.log(attributeName + " " + attributeValue);
-        return  '<div style="font-style:italic;display:inline">' + attributeName + '' + attributeValue + "</div><br>"
+	//console.log(attributeName + " " + attributeValue);
+        return  '<div style="font-style:italic;display:inline">' + attributeName + '' + attributeValue + "</div><br>";
     }
